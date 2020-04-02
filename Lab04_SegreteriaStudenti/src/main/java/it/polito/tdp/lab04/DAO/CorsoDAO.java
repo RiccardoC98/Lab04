@@ -33,7 +33,8 @@ public class CorsoDAO {
 				int numeroCrediti = rs.getInt("crediti");
 				String nome = rs.getString("nome");
 				int periodoDidattico = rs.getInt("pd");
-
+				
+				corsi.add( new Corso(codins, numeroCrediti, nome, periodoDidattico) );
 				System.out.println(codins + " " + numeroCrediti + " " + nome + " " + periodoDidattico);
 
 				// Crea un nuovo JAVA Bean Corso
@@ -47,7 +48,7 @@ public class CorsoDAO {
 
 		} catch (SQLException e) {
 			// e.printStackTrace();
-			throw new RuntimeException("Errore Db", e);
+			throw new RuntimeException("Errore DB", e);
 		}
 	}
 	
