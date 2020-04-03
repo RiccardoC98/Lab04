@@ -113,7 +113,7 @@ public class FXMLController {
     		} else {
     			txtArea.appendText("Lo studente NON è iscritto al corso!\n");
     		}
-    	} else {
+    	} else {  
     		txtArea.appendText("Selezionare un corso!\n");
     	}
     	

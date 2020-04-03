@@ -44,7 +44,7 @@ public class StudenteDAO {
 			throw new RuntimeException("Errore DB", e);
 		}
 	}	
-	
+	 
 	public boolean CercaSeIscritto(Studente s, Corso c) {
 
 		String sql = "SELECT * FROM iscrizione i "

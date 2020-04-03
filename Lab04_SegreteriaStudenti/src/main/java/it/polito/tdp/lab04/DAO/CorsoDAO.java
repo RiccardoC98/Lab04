@@ -141,7 +141,7 @@ public class CorsoDAO {
 				+ "WHERE i.matricola = ? AND i.codins = c.codins "
 				+ "GROUP BY c.codins, c.crediti, c.nome, c.pd "
 				+ "ORDER BY c.nome";
-
+ 
 		List<Corso> corsi = new LinkedList<Corso>();
 
 		try {
