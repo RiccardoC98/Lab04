@@ -15,7 +15,7 @@ public class StudenteDAO {
 	public Studente getStudenteByMatricola(Integer matricola) {
 
 		String sql = "SELECT * FROM studente WHERE matricola=?";
-		Studente studente;
+		Studente studente = null;
 
 		try {
 			Connection conn = ConnectDB.getConnection();
@@ -24,20 +24,19 @@ public class StudenteDAO {
 			
 			ResultSet rs = st.executeQuery();
 
-			if (rs.next()) {
+			while (rs.next()) {
 				Integer matr = rs.getInt("matricola");
 				String cognome = rs.getString("cognome");
 				String nome = rs.getString("nome");
 				String cds = rs.getString("CDS");
 				
 				studente = new Studente(matr, cognome, nome, cds);
-				System.out.println(studente);
-				return studente;
+			
 			}
 
 			conn.close();
 			
-			return null;
+			return studente;
 			
 
 		} catch (SQLException e) {
@@ -46,4 +45,33 @@ public class StudenteDAO {
 		}
 	}	
 	
+	public boolean CercaSeIscritto(Studente s, Corso c) {
+
+		String sql = "SELECT * FROM iscrizione i "
+				+ "WHERE matricola = ? AND codins = ? ";
+		boolean res = false;
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, s.getMatricola());
+			st.setString(2, c.getCodins());
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
+				res = true;
+			
+			}
+
+			conn.close();
+			
+			return res;
+		
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new RuntimeException("Errore DB", e);
+		}
+	}	
+	
+
 }

@@ -3,6 +3,7 @@ package it.polito.tdp.lab04;
 import java.util.*;
 
 import it.polito.tdp.lab04.DAO.CorsoDAO;
+import it.polito.tdp.lab04.DAO.StudenteDAO;
 import it.polito.tdp.lab04.model.Corso;
 import it.polito.tdp.lab04.model.Model;
 import it.polito.tdp.lab04.model.Studente;
@@ -25,6 +26,9 @@ public class FXMLController {
     @FXML
     private Button btnCercaIscritti;
 
+    @FXML
+    private Button btnIscritto;
+    
     @FXML
     private TextField txtMatricola;
 
@@ -50,23 +54,92 @@ public class FXMLController {
     private Button btnResert;
 
     @FXML
-    void doCercaCorsi(ActionEvent event) {
-
+    void doCercaCorsi(ActionEvent event) { // ai quali uno studente è iscritto
+    	txtArea.clear();
+    	Integer matricola = 0;
+ 
+    	try {
+    		matricola = Integer.parseInt(txtMatricola.getText());
+    	} catch (NumberFormatException nfe) {
+    		txtArea.appendText("Inserire una matricola valida!\n");
+    	}
+    	
+    	Studente s = this.model.getStudenteByMatricola(matricola);
+    	
+    	if (s != null) {
+    		List<Corso> corsi = new LinkedList<Corso>( this.model.getCorsiAiQualiEIscritto(s) );
+    		for (Corso c : corsi) {
+    			txtArea.appendText(c.toString());
+    		}
+    	} else {
+    		txtArea.appendText("Inserire una matricola valida!\n");
+    	}
     }
 
     @FXML
     void doCercaIscrittiCorso(ActionEvent event) {
-
+    	txtArea.clear();
+    	String nome = choiceBox.getSelectionModel().getSelectedItem();
+    	if (nome != "Scegliere corso") {
+    		List<Studente> studenti = new LinkedList<Studente> ( model.getStudentiIscrittiAlCorso( model.getCorso(nome)) );
+    		for (Studente s : studenti) {
+    			txtArea.appendText(s.toString());
+    		}
+    	} else {
+    		txtArea.appendText("Selezionare un corso!\n");
+    	}
+    	
+    	
     }
 
     @FXML
+    void doCercaSeIscritto(ActionEvent event) {
+    	txtArea.clear();
+    	Integer matricola = 0;
+ 
+    	try {
+    		matricola = Integer.parseInt(txtMatricola.getText());
+    	} catch (NumberFormatException nfe) {
+    		txtArea.appendText("Inserire una matricola valida!\n");
+    	}
+    	
+    	Studente s = this.model.getStudenteByMatricola(matricola);
+    	
+    	String nome = choiceBox.getSelectionModel().getSelectedItem();
+    	if (nome != "Scegliere corso") {
+    		boolean res = this.model.CercaSeIscritto(s, model.getCorso(nome));
+    		if (res) {
+    			txtArea.appendText("Lo studente è iscritto al corso!\n");
+    		} else {
+    			txtArea.appendText("Lo studente NON è iscritto al corso!\n");
+    		}
+    	} else {
+    		txtArea.appendText("Selezionare un corso!\n");
+    	}
+    	
+    }
+    
+    @FXML
     void doComplete(ActionEvent event) {
-    	Integer matricola = Integer.parseInt(txtMatricola.getText());    
-    	System.out.println(matricola);
-    	Studente s = model.getStudenteByMatricola(matricola);
-
-    	txtNome.setText(s.getNome());
-    	txtCognome.setText(s.getCognome());
+    	txtArea.clear();
+    	Integer matricola = 0;
+ 
+    	try {
+    		matricola = Integer.parseInt(txtMatricola.getText());
+    	} catch (NumberFormatException nfe) {
+    		txtArea.appendText("Inserire una matricola valida!\n");
+    	}
+    	
+    	Studente s = this.model.getStudenteByMatricola(matricola);
+    	
+    	if ( s != null) {
+    		txtNome.setText(s.getNome());
+        	txtCognome.setText(s.getCognome());
+    	} else {
+    		txtArea.clear();
+    		txtArea.appendText("Inserire una matricola valida!\n");
+    	}
+    	
     	
     }
 
@@ -77,7 +150,10 @@ public class FXMLController {
 
     @FXML
     void doReset(ActionEvent event) {
-
+    	txtArea.clear();
+    	txtNome.clear();
+    	txtCognome.clear();
+    	txtMatricola.clear();
     }
 
     @FXML
@@ -97,5 +173,9 @@ public class FXMLController {
         choiceBox.setItems(list);
         choiceBox.setValue("Scegliere corso");
     }
+
+	public void setModel(Model model) {
+		this.model = model;
+	}
     
 }

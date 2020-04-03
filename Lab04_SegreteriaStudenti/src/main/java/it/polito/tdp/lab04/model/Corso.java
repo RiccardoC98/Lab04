@@ -45,6 +45,12 @@ public class Corso {
 	public int getPeriodoDidattico() {
 		return periodoDidattico;
 	}
+
+	@Override
+	public String toString() {
+		return "Corso [codins=" + codins + ", numeroCrediti=" + numeroCrediti + ", nome=" + nome + ", periodoDidattico="
+				+ periodoDidattico + "]\n";
+	}
 	
 	
 	
